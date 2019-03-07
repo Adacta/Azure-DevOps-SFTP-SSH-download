@@ -1,0 +1,51 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Create Extension",
+            "type": "process",
+            "command": "${env:AppData}\\npm\\tfx.cmd",
+            "args": [
+                "extension",
+                "create",
+                "--manifest-globs",
+                "vss-extension.json",
+                "--rev-version"
+            ],
+            "group": "build",
+            "problemMatcher": [
+                "$msCompile"
+            ]
+        },
+        {
+            "label": "Publish Extension with PAT from settings",
+            "type": "process",
+            "command": "${env:AppData}\\npm\\tfx.cmd",
+            "args": [
+                "extension",
+                "publish",
+                "--manifest-globs vss-extension.json",
+                "-t",
+                "${config:task.variables.PublishPAT}"
+            ],
+            "group": "build",
+            "problemMatcher": []
+        },
+        {
+            "label": "Publish Extension with PAT prompt",
+            "type": "process",
+            "command": "${env:AppData}\\npm\\tfx.cmd extension publish --manifest-globs vss-extension.json -t ${input:PublishPAT}",
+            "group": "build",
+            "problemMatcher": []
+        }
+    ],
+    "inputs": [
+        {
+            "id": "PublishPAT",
+            "type": "promptString",
+            "description": "Enter Marketplace PAT"
+        }
+    ]
+}
