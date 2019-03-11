@@ -3,14 +3,14 @@
     "id": "e6e43054-d95e-4940-bb84-1cb6e98c4583",
     "name": "sftpDownload",
     "friendlyName": "SFTP / SSH Download",
-    "description": "SFTP / SSH Dowload 0.1.77",
-    "helpMarkDown": "[More information](https://github.com/Adacta/???)",
+    "description": "SFTP / SSH Dowload 1.1.79",
+    "helpMarkDown": "[More information](https://github.com/Adacta/Azure-DevOps-SFTP-SSH-download)",
     "category": "Utility",
     "author": "Adacta d.o.o.",
     "version": {
-        "Major": 0,
+        "Major": 1,
         "Minor": 1,
-        "Patch": 77
+        "Patch": 79
     },
     "minimumAgentVersion": "1.95.1",
     "instanceNameFormat": "SFTP/SSH Download from $(source)",

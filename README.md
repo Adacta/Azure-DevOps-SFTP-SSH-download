@@ -52,10 +52,10 @@ steps:
   ```
 
 ## Release Notes
-> **0.1.1** *2019-03-11*
+> **1.1** *2019-03-11*
 > * `Clean target folder` option added
 
-> **0.1.0** *2019-03-01*
+> **1.0** *2019-03-01*
 > * Initial version (`preview`)
 
 

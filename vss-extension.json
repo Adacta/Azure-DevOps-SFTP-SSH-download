@@ -2,10 +2,10 @@
     "manifestVersion": 1,
     "id": "azdevopsSFTP",
     "publisher": "adacta",
-    "version": "0.1.77",
-    "name": "SFTP / SSH file transfer download upload",
-    "description": "SFTP / SSH Download and Upload task for Azure DevOps build and release pipeline. v0.1.77",
-    "public": false,
+    "version": "1.1.79",
+    "name": "SFTP / SSH download",
+    "description": "SFTP / SSH file Download task for Azure DevOps build and release pipeline.",
+    "public": true,
     "categories": [
         "Azure Pipelines"
     ],
