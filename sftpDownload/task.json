@@ -1,19 +1,19 @@
 {
     "$schema": "https://raw.githubusercontent.com/Microsoft/azure-pipelines-task-lib/master/tasks.schema.json",
     "id": "e6e43054-d95e-4940-bb84-1cb6e98c4583",
-    "name": "sshDownload",
-    "friendlyName": "SSH / SFTP Download",
-    "description": "SSH / SFTP Dowload 0.1.68",
+    "name": "sftpDownload",
+    "friendlyName": "SFTP / SSH Download",
+    "description": "SFTP / SSH Dowload 0.1.77",
     "helpMarkDown": "[More information](https://github.com/Adacta/???)",
     "category": "Utility",
     "author": "Adacta d.o.o.",
     "version": {
         "Major": 0,
         "Minor": 1,
-        "Patch": 70
+        "Patch": 77
     },
     "minimumAgentVersion": "1.95.1",
-    "instanceNameFormat": "SSH/SFTP Download from $(source)",
+    "instanceNameFormat": "SFTP/SSH Download from $(source)",
     "groups": [
         {
             "name": "sshConnection",
@@ -121,7 +121,7 @@
             "label": "Secure File Path",
             "defaultValue": "$(_Download_Secure_File_.secureFilePath)",
             "required": false,
-            "helpMarkDown": "Filename of secure file. Use [Download Secure File](https://go.microsoft.com/fwlink/?LinkID=862069) and set output variable name (`Reference name` under *Output Variables*)."
+            "helpMarkDown": "Filename of secure file. Use [Download Secure File](https://go.microsoft.com/fwlink/?LinkID=862069) task and set output variable name (`Reference name` under *Output Variables*)."
         }
     ],
     "outputVariables": [
@@ -132,7 +132,7 @@
     ],
     "execution": {
         "PowerShell3": {
-            "target": "sshDownload.ps1"
+            "target": "sftpDownload.ps1"
         }
     }
 }

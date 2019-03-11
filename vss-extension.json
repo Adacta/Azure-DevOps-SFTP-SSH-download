@@ -2,10 +2,10 @@
     "manifestVersion": 1,
     "id": "azdevopsSFTP",
     "publisher": "adacta",
-    "version": "0.1.70",
+    "version": "0.1.77",
     "name": "SFTP / SSH file transfer download upload",
-    "description": "SFTP / SSH Download and Upload task for Azure DevOps build and release pipeline",
-    "public": true,
+    "description": "SFTP / SSH Download and Upload task for Azure DevOps build and release pipeline. v0.1.77",
+    "public": false,
     "categories": [
         "Azure Pipelines"
     ],
@@ -19,25 +19,43 @@
         "SSH",
         "deploy"
     ],
+    "screenshots": [
+        {
+            "path": "screenshots/SFTP-Download-hostname.png"
+        },
+        {
+            "path": "screenshots/SFTP-Download-task.png"
+        }
+    ],
+    "content": {
+        "details": {
+            "path": "readme.md"
+        },
+        "license": {
+            "path": "LICENSE.md"
+        }
+    },
+    "icons": {
+        "default": "images/sftp-icon.png"
+    },
     "contributions": [
         {
-            "id": "task-ssh-download",
+            "id": "task-sftp-download",
             "type": "ms.vss-distributed-task.task",
             "targets": [
                 "ms.vss-distributed-task.task"
             ],
             "properties": {
-                "name": "sshDownload"
+                "name": "sftpDownload"
             }
         }
     ],
     "files": [
         {
-            "path": "sshDownload",
-            "addressable": false
+            "path": "sftpDownload"
         },
         {
-            "path": "README.md",
+            "path": "screenshots",
             "addressable": true
         }
     ],

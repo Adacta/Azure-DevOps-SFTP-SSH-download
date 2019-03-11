@@ -159,6 +159,9 @@ try {
 
             Move-Item $tempFi.FullName $targetFilename.FullName -Force
         }
+        #Write-Host "##vso[task.setvariable variable=ProcessedFilesCount;isSecret=false;isOutput=true;]999"
+        Set-VstsTaskVariable -Name ProcessedFilesCount -Value $i
+
         #$stopAt = [datetime]::UtcNow.AddSeconds(20)
         #$i=0
         #while ($stopAt -gt [datetime]::UtcNow) {
@@ -167,16 +170,12 @@ try {
         #    Write-VstsTaskVerbose -Message "Stream $i"
         #    Write-VstsSetProgress -Percent ($i/10) -CurrentOperation "File $i"
         #}
-        $sftp
         #Write-VstsSetResult "Succeeded"
     }
     finally {
         $sftp.Disconnect()
         $sftp.Dispose()
     }
-
-    #Write-Host "##vso[task.setvariable variable=ProcessedFilesCount;isSecret=false;isOutput=true;]999"
-    Set-VstsTaskVariable -Name ProcessedFilesCount -Value 999
 }
 finally {
     Trace-VstsLeavingInvocation $MyInvocation
