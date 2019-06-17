@@ -6,5 +6,12 @@
             ],
             "url": "https://raw.githubusercontent.com/Microsoft/azure-pipelines-task-lib/master/tasks.schema.json"
         }
-    ]
+    ],
+    "cSpell.words": [
+        "Adacta",
+        "azdevops"
+    ],
+    "markdownlint.config": {
+        "no-bare-urls": false
+    }
 }

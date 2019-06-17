@@ -3,7 +3,7 @@
     "id": "e6e43054-d95e-4940-bb84-1cb6e98c4583",
     "name": "sftpDownload",
     "friendlyName": "SFTP / SSH Download",
-    "description": "SFTP / SSH Dowload 1.1.79",
+    "description": "SFTP / SSH Download 1.1.79",
     "helpMarkDown": "[More information](https://github.com/Adacta/Azure-DevOps-SFTP-SSH-download)",
     "category": "Utility",
     "author": "Adacta d.o.o.",
@@ -58,7 +58,7 @@
             "label": "Clean target folder",
             "defaultValue": "false",
             "required": false,
-            "helpMarkDown": "Delete all existing files and subfolders in the target folder before copying.",
+            "helpMarkDown": "Delete all existing files and sub-folders in the target folder before copying.",
             "groupName": "advanced"
         },
         {

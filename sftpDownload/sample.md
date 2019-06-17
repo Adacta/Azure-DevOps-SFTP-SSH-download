@@ -1,5 +1,6 @@
-## SSH Connection example
+# Samples
 
+## SSH Connection example
 
 ```json
 {
