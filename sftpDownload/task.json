@@ -3,17 +3,17 @@
     "id": "e6e43054-d95e-4940-bb84-1cb6e98c4583",
     "name": "sftpDownload",
     "friendlyName": "SFTP / SSH Download",
-    "description": "SFTP / SSH Download 1.1.79",
-    "helpMarkDown": "[More information](https://github.com/Adacta/Azure-DevOps-SFTP-SSH-download)",
+    "description": "SFTP / SSH Download 1.2.17",
+    "helpMarkDown": "Download files from remote server. [More information](https://github.com/Adacta/Azure-DevOps-SFTP-SSH-download/)",
     "category": "Utility",
     "author": "Adacta d.o.o.",
     "version": {
         "Major": 1,
-        "Minor": 1,
-        "Patch": 79
+        "Minor": 2,
+        "Patch": 17
     },
     "minimumAgentVersion": "1.95.1",
-    "instanceNameFormat": "SFTP/SSH Download from $(source)",
+    "instanceNameFormat": "SFTP/SSH Download from $(sourcePath)",
     "groups": [
         {
             "name": "sshConnection",
@@ -118,13 +118,13 @@
             "visibleRule": "connectionType = hostname",
             "groupName": "sshConnection",
             "type": "string",
-            "label": "Secure File Path",
+            "label": "Private Key (Secure File Path)",
             "defaultValue": "$(_Download_Secure_File_.secureFilePath)",
             "required": false,
             "helpMarkDown": "Filename of secure file. Use [Download Secure File](https://go.microsoft.com/fwlink/?LinkID=862069) task and set output variable name (`Reference name` under *Output Variables*)."
         }
     ],
-    "outputVariables": [
+    "OutputVariables": [
         {
             "name": "ProcessedFilesCount",
             "description": "Number of processed files"

@@ -1,4 +1,5 @@
-tfx extension create --manifest-globs vss-extension.json --rev-version
+REM tfx extension create --manifest-globs vss-extension.json --rev-version
+tfx extension create --manifest-globs vss-extension.json
 tfx extension publish --manifest-globs vss-extension.json
 
 REM tfx login -u https://marketplace.visualstudio.com

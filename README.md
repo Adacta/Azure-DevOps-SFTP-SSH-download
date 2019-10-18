@@ -59,6 +59,11 @@ steps:
 
 ## Release Notes
 
+> **1.2** *2019-10-18*
+>
+> - Fixed bug with empty source
+> - Added ApplicationInsights
+>
 > **1.1** *2019-03-11*
 >
 > - `Clean target folder` option added

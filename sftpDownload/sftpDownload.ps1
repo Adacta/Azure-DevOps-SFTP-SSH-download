@@ -1,6 +1,76 @@
 [CmdletBinding()]
 param()
 
+function Get-FileLocation([string]$fileName)
+{
+    pushd $PSScriptRoot
+    Write-VstsTaskVerbose "Searching for $fileName at $PSScriptRoot"
+    $fi = ls -Force -Recurse -File $fileName
+    if ($fi -is [System.IO.FileInfo]) {
+        $fullName = $fi.FullName
+        Write-VstsTaskVerbose "Found $fullName"
+    }
+    popd
+
+    return $fullName
+}
+
+[string]$operationId = [guid]::NewGuid()
+Write-VstsTaskVerbose "ApplicationInsights.OperationId: $operationId"
+try
+{
+    if (![string]::IsNullOrWhiteSpace($env:InstrumentationKey))
+    {
+        $InstrumentationKey = $env:InstrumentationKey
+    }
+
+    Add-Type -Path (Get-FileLocation 'System.Diagnostics.DiagnosticSource.dll') -ErrorAction Continue
+    Add-Type -Path (Get-FileLocation 'Microsoft.ApplicationInsights.dll') -ErrorAction Continue
+
+    # https://docs.microsoft.com/en-gb/azure/azure-monitor/app/api-custom-events-metrics
+    $appInsights = New-Object Microsoft.ApplicationInsights.TelemetryClient -ErrorAction Continue
+    if ($appInsights)
+    {
+        $appInsights.InstrumentationKey = $InstrumentationKey
+        #$appInsightsVersion = $appInsights.GetType().Assembly.GetName().Version
+        $appInsightsProp = $appInsights.Context.GlobalProperties
+        if ($null -eq $appInsightsProp)
+        {
+            $appInsightsProp = $appInsights.Context.Properties
+        }
+        Get-ChildItem env:AGENT* |% {
+            $appInsightsProp[$_.Key] = $_.Value
+        }
+        Get-ChildItem env:SYSTEM* |% {
+            $appInsightsProp[$_.Key] = $_.Value
+        }
+        $appInsightsProp["ImageVersion"] = $env.ImageVersion
+        $appInsightsProp["PSScriptRoot"] = $PSScriptRoot
+        $appInsightsProp["PSVersion"] = $PSVersionTable.PSVersion
+        $appInsightsProp["CLRVersion"] = $PSVersionTable.CLRVersion
+        if ($PSScriptRoot -match "[\\/]([\d\.]+)[\\/]")
+        {
+            $appInsights.Context.Component.Version = $Matches.1
+        }
+
+        $appInsights.Context.Operation.Name = "sftpDownload"
+        $appInsights.Context.Operation.Id = $operationId
+
+        Write-VstsTaskVerbose "ApplicationInsights.StartOperation $operationId"
+        #[Microsoft.ApplicationInsights.TelemetryClientExtensions]::StartOperation($appInsights, "sftpDownload", $operationId)
+        [type[]]$methodArgs = ($appInsights.GetType(), [string],[string],[string])
+        $method = [Microsoft.ApplicationInsights.TelemetryClientExtensions].GetMethod("StartOperation", $methodArgs)
+        $genericArgs = [Microsoft.ApplicationInsights.DataContracts.RequestTelemetry]
+        $methodGeneric = $method.MakeGenericMethod($genericArgs)
+        [object[]]$parameters = ([Microsoft.ApplicationInsights.TelemetryClient]$appInsights, "sftpDownload", $operationId, [string]$null)
+        $telemetry = $methodGeneric.Invoke([object]$null, $parameters)
+    }
+}
+catch
+{
+    Write-Warning "ApplicationInsights: $_"
+}
+
 Trace-VstsEnteringInvocation $MyInvocation
 
 function sftpListDirectoryRecursive($sftp, $remoteDir)
@@ -18,7 +88,10 @@ function sftpListDirectoryRecursive($sftp, $remoteDir)
         {
             Write-VstsTaskVerbose -Verbose "Listing $($file.FullName)"
             [System.Collections.Generic.List[string]] $subResult = sftpListDirectoryRecursive $sftp $file.FullName
-            $result.AddRange($subResult)
+            if ($subResult)
+            {
+                $result.AddRange($subResult)
+            }
         }
         elseif ($file.IsRegularFile)
         {
@@ -30,6 +103,10 @@ function sftpListDirectoryRecursive($sftp, $remoteDir)
 }
 
 try {
+    if ($env:VerbosePreference)
+    {
+        Set-Variable VerbosePreference $env:VerbosePreference -ErrorAction Continue
+    }
     Import-VstsLocStrings "$PSScriptRoot\Task.json"
 
     ### check https://github.com/Microsoft/azure-pipelines-task-lib/blob/master/powershell/Docs/UsingOM.md
@@ -131,7 +208,7 @@ try {
         $sourceContentsArray = $sourceContents.Split(("`r","`n"), [System.StringSplitOptions]::RemoveEmptyEntries)
         $remoteFilesMatch = [System.Collections.Generic.List[string]]::new()
         $sourceContentsArray | % {
-            Write-Verbose -Verbose "Filter: '$_'"
+            Write-Verbose -Message "Filter: '$_'" -Verbose
             $remoteFilesMatch.AddRange([Minimatch.Minimatcher]::Filter($remoteFiles, $_, $null))
         }
         $remoteFilesMatch = [System.Linq.Enumerable]::ToArray([System.Linq.Enumerable]::Distinct($remoteFilesMatch))
@@ -178,5 +255,31 @@ try {
     }
 }
 finally {
+    if ($appInsights -and $Error -and $Error[0].Exception)
+    {
+        $lastException = $Error[0].Exception
+        $appInsights.TrackException($lastException)
+        if ($telemetry)
+        {
+            $telemetry.Telemetry.ResponseCode = 500
+            $telemetry.Telemetry.Success = $false
+        }
+    }
+    if ($telemetry)
+    {
+        Write-VstsTaskVerbose "ApplicationInsights.StopOperation $operationId"
+        [Microsoft.ApplicationInsights.TelemetryClientExtensions]::StopOperation($appInsights, $telemetry)
+    }
+    if ($appInsights)
+    {
+        try
+        {
+            $appInsights.Flush()
+        }
+        catch
+        {
+            Write-VstsTaskVerbose -Verbose "Exception flushing AppInsights $_"
+        }
+    }
     Trace-VstsLeavingInvocation $MyInvocation
 }
