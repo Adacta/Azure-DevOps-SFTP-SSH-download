@@ -146,6 +146,7 @@ try {
             else {
                 $authMethod = [Renci.SshNet.NoneAuthenticationMethod]::new($conn.Auth.parameters.username)
             }
+            "Using $connectionType authentication $authMethod"
             $ci = [Renci.SshNet.ConnectionInfo]::new($conn.Data.host, $conn.Data.port, $conn.Auth.parameters.username, $authMethod)
         }
         "hostname" {
@@ -168,6 +169,7 @@ try {
             else {
                 $authMethod = [Renci.SshNet.NoneAuthenticationMethod]::new($username)
             }
+            "Using $connectionType authentication $authMethod"
             $ci = [Renci.SshNet.ConnectionInfo]::new($sshHost, $username, $authMethod)
         }
         Default {throw "Unsupported connectionType '$connectionType'"}
