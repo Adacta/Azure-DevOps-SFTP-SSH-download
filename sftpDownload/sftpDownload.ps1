@@ -211,7 +211,9 @@ try {
         $remoteFilesMatch = [System.Collections.Generic.List[string]]::new()
         $sourceContentsArray | % {
             Write-Verbose -Message "Filter: '$_'" -Verbose
-            $remoteFilesMatch.AddRange([Minimatch.Minimatcher]::Filter($remoteFiles, $_, $null))
+            if ($_) {
+                $remoteFilesMatch.AddRange([Minimatch.Minimatcher]::Filter($remoteFiles, $_, $null))
+            }
         }
         $remoteFilesMatch = [System.Linq.Enumerable]::ToArray([System.Linq.Enumerable]::Distinct($remoteFilesMatch))
         Write-VstsTaskVerbose -Verbose "Match files $($remoteFilesMatch.Length) for $sourceContentsArray"

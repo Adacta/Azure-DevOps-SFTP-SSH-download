@@ -3,14 +3,14 @@
     "id": "e6e43054-d95e-4940-bb84-1cb6e98c4583",
     "name": "sftpDownload",
     "friendlyName": "SFTP / SSH Download",
-    "description": "SFTP / SSH Download 1.2.20",
+    "description": "SFTP / SSH Download 1.3.0",
     "helpMarkDown": "Download files from remote server. [More information](https://github.com/Adacta/Azure-DevOps-SFTP-SSH-download/)",
     "category": "Utility",
     "author": "Adacta d.o.o.",
     "version": {
         "Major": 1,
-        "Minor": 2,
-        "Patch": 20
+        "Minor": 3,
+        "Patch": 0
     },
     "minimumAgentVersion": "1.95.1",
     "instanceNameFormat": "SFTP/SSH Download from $(sourcePath)",

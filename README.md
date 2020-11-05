@@ -59,6 +59,10 @@ steps:
 
 ## Release Notes
 
+> **1.3** *2020-11-05*
+>
+> - Fixed bug with extension manifest target #3
+>
 > **1.2** *2019-10-18*
 >
 > - Fixed bug with empty source
