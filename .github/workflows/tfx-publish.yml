@@ -1,0 +1,65 @@
+# This workflow will do a clean install of node dependencies, build the source code and run tests across different versions of node
+# For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
+
+name: TFX publish
+
+on:
+  workflow_dispatch:
+    branches: [ master ]
+    inputs:
+      Publish:
+        description: 'Publish extension to marketplace'
+        required: false
+        default: false
+ 
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - name: Version Vsix
+      id: versionVsix
+      uses: paulhatch/semantic-version@v3.1.2
+      with:
+        branch: master
+        format: "${major}.${minor}.${patch}.${increment}"
+        major_pattern: "(MAJOR)"
+        minor_pattern: "(MINOR)"
+
+    - name: Use Node.js 14.x
+      uses: actions/setup-node@v2
+      with:
+        node-version: 14.x
+    
+    - run: npm i tfx-cli
+    
+    - name: "* TFX extension create *"
+      id: tfxCreate
+      if: ${{ !(github.event.inputs.Publish) }}
+      run: |
+        ./node_modules/.bin/tfx extension create --output-path ../out/ --no-prompt --override '{ "version": "${{ steps.versionVsix.outputs.version }}"}'
+    
+    - name: "* * * TFX extension publish * * *"
+      id: tfxPublish
+      if: github.event.inputs.Publish
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions
+      run: |
+        ./node_modules/.bin/tfx extension publish --output-path ../out/ --no-prompt --auth-type pat --token ${{ secrets.MARKETPLACE_PUBLISH_PAT }} --no-wait-validation --override '{ "version": "0.2.${{ github.run_number }}"}'
+        echo "* * * Creationg GitHub release * * *"
+        set -x
+        assets=()
+        for asset in ../out/*.vsix; do
+          assets+=("-a" "$asset")
+        done
+        hub release create "${assets[@]}" -t ${{ github.sha }} -m "Release ${{ steps.versionVsix.outputs.version }}" "${{ steps.versionVsix.outputs.version_tag }}"
+    
+    - name: Upload artifact
+      if: steps.tfxPublish.outcome == 'success'
+      uses: actions/upload-artifact@v1
+      with:
+        name: vsix.${{ steps.versionVsix.outputs.version_tag }}
+        path: ../out/
