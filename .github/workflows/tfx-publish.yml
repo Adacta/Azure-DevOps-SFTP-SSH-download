@@ -58,7 +58,7 @@ jobs:
         hub release create "${assets[@]}" -t ${{ github.sha }} -m "Release ${{ steps.versionVsix.outputs.version }}" "${{ steps.versionVsix.outputs.version_tag }}"
     
     - name: Upload artifact
-      if: steps.tfxPublish.outcome == 'success'
+      if: steps.tfxPublish.outcome == 'success' || steps.tfxPublish.outcome == 'success'
       uses: actions/upload-artifact@v1
       with:
         name: vsix.${{ steps.versionVsix.outputs.version_tag }}
