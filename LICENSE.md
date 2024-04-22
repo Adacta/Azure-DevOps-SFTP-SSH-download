@@ -1,6 +1,6 @@
 MIT License
 
-Copyright (c) [Adacta d.o.o.](http://www.adacta.si)
+Copyright (c) [BE-terna](http://www.be-terna.com)
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

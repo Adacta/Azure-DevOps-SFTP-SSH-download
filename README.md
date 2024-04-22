@@ -1,6 +1,7 @@
-# Adacta SFTP / SSH Download
+# BE-terna ~~Adacta~~ SFTP / SSH Download
 
 *Azure DevOps Pipelines Extension* for build and release pipelines.
+> _BE-terna_ acquired _Adacta_ in [2019](https://www.be-terna.com/about-us/news/be-terna-and-deutsche-private-equity-acquire-adacta).
 
 ## SFTP / SSH Download task
 

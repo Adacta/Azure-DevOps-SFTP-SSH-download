@@ -2,7 +2,7 @@
     "manifestVersion": 1,
     "id": "azdevopsSFTP",
     "publisher": "adacta",
-    "version": "1.3.0",
+    "version": "2.0.0",
     "name": "SFTP / SSH download",
     "description": "SFTP / SSH file Download task for Azure DevOps build and release pipeline.",
     "public": true,
